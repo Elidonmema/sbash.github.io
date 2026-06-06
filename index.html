@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBASH – Sindikata e Bashkuar e Arsimit Shqiptar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #B22222;
+    --red-dark: #8B0000;
+    --red-light: #f9e8e8;
+    --gold: #C8A84B;
+    --gold-light: #fdf6e3;
+    --dark: #1a1a1a;
+    --mid: #444;
+    --muted: #777;
+    --bg: #fafaf8;
+    --white: #ffffff;
+    --border: #e5e0d8;
+    --radius: 4px;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--red-dark);
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--white); font-size: 1.4rem; font-weight: 700;
+    letter-spacing: 2px; text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none; font-size: 0.85rem;
+    font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 0 1.1rem; height: 64px; display: flex; align-items: center;
+    border-bottom: 3px solid transparent; transition: all 0.2s;
+    margin-bottom: -3px;
+  }
+  .nav-links a:hover { color: var(--white); border-bottom-color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--red-dark);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,168,75,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(200,168,75,0.15);
+    border: 1px solid rgba(200,168,75,0.4);
+    color: var(--gold);
+    font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 16px; border-radius: 2px; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white); font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 700; line-height: 1.2;
+    max-width: 750px; margin: 0 auto 1rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero p {
+    color: rgba(255,255,255,0.72); font-size: 1.05rem;
+    max-width: 560px; margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--dark);
+    font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px;
+    padding: 14px 32px; border-radius: var(--radius);
+    text-decoration: none; transition: background 0.2s;
+    border: none; cursor: pointer; font-family: inherit;
+  }
+  .btn-primary:hover { background: #d4b05a; }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    font-size: 0.9rem; font-weight: 500; letter-spacing: 0.5px;
+    padding: 14px 32px; border-radius: var(--radius);
+    text-decoration: none; transition: all 0.2s;
+    cursor: pointer; font-family: inherit;
+  }
+  .btn-outline:hover { border-color: var(--white); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; justify-content: space-around; flex-wrap: wrap;
+    padding: 1.8rem 2rem;
+  }
+  .stat { text-align: center; padding: 0.5rem 1.5rem; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--red);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; }
+
+  /* ── SECTION ── */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--red); font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700;
+    color: var(--dark); margin-bottom: 0.75rem;
+  }
+  .section-sub {
+    color: var(--muted); font-size: 1rem; max-width: 540px;
+    font-weight: 300; margin-bottom: 3rem;
+  }
+
+  /* ── MATERIALS GRID ── */
+  section.materials { background: var(--bg); }
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .material-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .material-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+  .card-top {
+    height: 6px;
+    background: var(--red);
+  }
+  .card-top.gold { background: var(--gold); }
+  .card-top.dark { background: var(--dark); }
+  .card-body { padding: 1.4rem 1.5rem; }
+  .card-cat {
+    font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--red); font-weight: 600; margin-bottom: 0.6rem;
+  }
+  .card-cat.gold-cat { color: #8a7030; }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 600; color: var(--dark);
+    margin-bottom: 0.5rem; line-height: 1.4;
+  }
+  .card-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+  .card-meta { display: flex; gap: 1rem; font-size: 0.78rem; color: var(--muted); }
+  .card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card-date { font-size: 0.78rem; color: var(--muted); }
+  .card-btn {
+    font-size: 0.8rem; font-weight: 600; color: var(--red);
+    text-decoration: none; letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+  .card-btn:hover { color: var(--red-dark); }
+
+  /* ── NEWS ── */
+  section.news { background: var(--white); }
+  .news-list { display: flex; flex-direction: column; gap: 1px; }
+  .news-item {
+    display: grid; grid-template-columns: 90px 1fr auto;
+    align-items: start; gap: 1.5rem;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .news-date-block {
+    background: var(--red-light);
+    border: 1px solid #f0c4c4;
+    border-radius: var(--radius);
+    text-align: center; padding: 0.6rem;
+  }
+  .news-day { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--red); line-height: 1; }
+  .news-mon { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--red); font-weight: 600; }
+  .news-title { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.3rem; color: var(--dark); }
+  .news-excerpt { font-size: 0.85rem; color: var(--muted); }
+  .news-tag {
+    font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 2px; font-weight: 600; white-space: nowrap;
+  }
+  .tag-red { background: var(--red-light); color: var(--red); }
+  .tag-gold { background: var(--gold-light); color: #7a6020; }
+  .tag-dark { background: #efefef; color: #555; }
+
+  /* ── ABOUT / MISSION ── */
+  section.mission { background: var(--dark); }
+  section.mission .section-tag { color: var(--gold); }
+  section.mission .section-title { color: var(--white); }
+  section.mission .section-sub { color: rgba(255,255,255,0.5); }
+  .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  @media (max-width: 768px) { .mission-grid { grid-template-columns: 1fr; } }
+  .mission-text { color: rgba(255,255,255,0.75); font-weight: 300; line-height: 1.9; font-size: 0.98rem; }
+  .mission-text strong { color: var(--gold); font-weight: 600; }
+  .pillars { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem; }
+  .pillar {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1.2rem; border: 1px solid rgba(255,255,255,0.1);
+    border-left: 3px solid var(--gold);
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius);
+  }
+  .pillar-icon { font-size: 1.4rem; margin-top: 2px; flex-shrink: 0; }
+  .pillar-title { font-weight: 600; color: var(--white); font-size: 0.95rem; margin-bottom: 3px; }
+  .pillar-desc { font-size: 0.84rem; color: rgba(255,255,255,0.5); }
+
+  /* ── MEMBERSHIP FORM ── */
+  section.membership { background: var(--red-dark); position: relative; overflow: hidden; }
+  section.membership::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 19px, rgba(255,255,255,0.015) 19px, rgba(255,255,255,0.015) 20px);
+    pointer-events: none;
+  }
+  section.membership .section-tag { color: var(--gold); }
+  section.membership .section-title { color: var(--white); }
+  section.membership .section-sub { color: rgba(255,255,255,0.6); }
+  .form-card {
+    background: var(--white);
+    border-radius: 6px; padding: 2.5rem 2.5rem;
+    max-width: 780px;
+    position: relative; z-index: 1;
+  }
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700; color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+  .form-subtitle { font-size: 0.88rem; color: var(--muted); margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+  .form-section-label {
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--red); font-weight: 700; margin: 1.5rem 0 1rem;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 1rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 0.82rem; font-weight: 600; color: var(--mid); letter-spacing: 0.2px; }
+  label .req { color: var(--red); margin-left: 2px; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="date"],
+  select, textarea {
+    padding: 10px 13px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.9rem; font-family: inherit; color: var(--dark);
+    background: var(--bg);
+    transition: border-color 0.15s;
+    outline: none;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--red); background: var(--white); }
+  textarea { resize: vertical; min-height: 80px; }
+  select { cursor: pointer; }
+  .checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+  .checkbox-item { display: flex; align-items: flex-start; gap: 10px; }
+  .checkbox-item input[type="checkbox"] { width: 16px; height: 16px; margin-top: 3px; accent-color: var(--red); flex-shrink: 0; cursor: pointer; }
+  .checkbox-item label { font-size: 0.85rem; font-weight: 400; color: var(--mid); cursor: pointer; }
+  .form-consent {
+    background: var(--red-light); border: 1px solid #f0c4c4;
+    border-radius: var(--radius); padding: 1rem 1.2rem;
+    font-size: 0.82rem; color: #7a3030; margin: 1.5rem 0;
+    line-height: 1.6;
+  }
+  .form-submit {
+    display: flex; gap: 1rem; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; margin-top: 1.5rem;
+    border-top: 1px solid var(--border); padding-top: 1.5rem;
+  }
+  .btn-submit {
+    background: var(--red); color: var(--white);
+    border: none; padding: 14px 36px; border-radius: var(--radius);
+    font-size: 0.95rem; font-weight: 600; font-family: inherit;
+    cursor: pointer; letter-spacing: 0.3px; transition: background 0.2s;
+  }
+  .btn-submit:hover { background: var(--red-dark); }
+  .submit-note { font-size: 0.78rem; color: var(--muted); }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none; text-align: center; padding: 3rem 2rem;
+  }
+  .success-msg.active { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .success-msg h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--dark); }
+  .success-msg p { color: var(--muted); max-width: 380px; margin: 0 auto; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #111; color: rgba(255,255,255,0.5);
+    padding: 3rem 2rem 2rem;
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+  @media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr; } }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--white); font-weight: 700; margin-bottom: 0.75rem; }
+  .footer-logo span { color: var(--gold); }
+  .footer-desc { font-size: 0.85rem; line-height: 1.8; max-width: 300px; }
+  .footer-heading { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 1rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.85rem; transition: color 0.15s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    font-size: 0.78rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">SBA<span>SH</span></a>
+    <div class="nav-links">
+      <a href="#materiale">Materiale</a>
+      <a href="#lajme">Lajme</a>
+      <a href="#misioni">Misioni</a>
+      <a href="#anetaresimi">Anëtarëso</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">Sindikata e Bashkuar e Arsimit Shqiptar</div>
+  <h1>Zëri i <em>Mësuesit</em> Shqiptar</h1>
+  <p>SBASH mbron të drejtat, dinjitetin dhe interesat e çdo mësuesi në Shqipëri — nga shkolla fillore deri në arsimin e lartë.</p>
+  <div class="hero-btns">
+    <a href="#anetaresimi" class="btn-primary">Bëhu Anëtar</a>
+    <a href="#materiale" class="btn-outline">Shiko Materialet</a>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num">28 000+</div>
+      <div class="stat-label">Anëtarë aktivë</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">36</div>
+      <div class="stat-label">Vjet aktivitet</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">12</div>
+      <div class="stat-label">Qarqe të përfaqësuara</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">Materiale & dokumente</div>
+    </div>
+  </div>
+</div>
+
+<!-- MATERIALS -->
+<section class="materials" id="materiale">
+  <div class="section-inner">
+    <div class="section-tag">Burime & Dokumenta</div>
+    <h2 class="section-title">Materiale për Mësuesit</h2>
+    <p class="section-sub">Qasje të lirë në udhëzues, marrëveshje kolektive, formularë dhe burime trajnimi.</p>
+
+    <div class="materials-grid">
+
+      <div class="material-card">
+        <div class="card-top"></div>
+        <div class="card-body">
+          <div class="card-cat">Marrëveshje Kolektive</div>
+          <div class="card-title">Kontrata Kolektive e Punës 2024–2026</div>
+          <div class="card-desc">Teksti i plotë i marrëveshjes ndërmjet SBASH dhe Ministrisë së Arsimit. Përfshin shtesë page, orari, vlerësim.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">Mars 2024</span>
+          <a href="#" class="card-btn">Shkarko PDF →</a>
+        </div>
+      </div>
+
+      <div class="material-card">
+        <div class="card-top gold"></div>
+        <div class="card-body">
+          <div class="card-cat gold-cat">Të Drejta & Procedura</div>
+          <div class="card-title">Udhëzues i të Drejtave të Mësuesit</div>
+          <div class="card-desc">Çdo mësues duhet ta njohë: procedurat disiplinore, ndërprerja e kontratës, ankimet dhe mbrojtja sindikale.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">Janar 2024</span>
+          <a href="#" class="card-btn">Lexo Online →</a>
+        </div>
+      </div>
+
+      <div class="material-card">
+        <div class="card-top dark"></div>
+        <div class="card-body">
+          <div class="card-cat">Pagat & Paga</div>
+          <div class="card-title">Tabela e Re e Pagave 2024</div>
+          <div class="card-desc">Shkallëzimi i plotë i pagave sipas kategorisë, titullit dhe viteve të eksperiencës. I përditësuar pas negociatave.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">Shkurt 2024</span>
+          <a href="#" class="card-btn">Shiko Tabelën →</a>
+        </div>
+      </div>
+
+      <div class="material-card">
+        <div class="card-top"></div>
+        <div class="card-body">
+          <div class="card-cat">Trajnime</div>
+          <div class="card-title">Kalendari i Trajnimeve SBASH 2024</div>
+          <div class="card-desc">Trajnime profesionale, seminare dhe webinare të organizuara nga SBASH gjatë vitit shkollor 2024-25.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">Shtator 2024</span>
+          <a href="#" class="card-btn">Shiko Kalendarin →</a>
+        </div>
+      </div>
+
+      <div class="material-card">
+        <div class="card-top gold"></div>
+        <div class="card-body">
+          <div class="card-cat gold-cat">Formularë Zyrtarë</div>
+          <div class="card-title">Formularë & Ankesa Sindikale</div>
+          <div class="card-desc">Të gjithë formularët zyrtarë: kërkesa për ndërhyrje sindikale, ankim vendimi, raportim shkeljes.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">Të azhurnuara</span>
+          <a href="#" class="card-btn">Shkarko →</a>
+        </div>
+      </div>
+
+      <div class="material-card">
+        <div class="card-top dark"></div>
+        <div class="card-body">
+          <div class="card-cat">Legjislacion</div>
+          <div class="card-title">Ligjet Kryesore të Arsimit</div>
+          <div class="card-desc">Ligji i Arsimit Parauniversitar, Statusi i Mësuesit, Kodi i Punës — me komentare nga juristët e SBASH.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">Të kompiluar</span>
+          <a href="#" class="card-btn">Shiko Listën →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="news" id="lajme">
+  <div class="section-inner">
+    <div class="section-tag">Lajme & Njoftime</div>
+    <h2 class="section-title">Të Fundit nga SBASH</h2>
+    <p class="section-sub">Ndjekni zhvillimet e fundit nga sindikata, negociatat dhe aktivitetet për mësuesit.</p>
+
+    <div class="news-list">
+
+      <div class="news-item">
+        <div class="news-date-block">
+          <div class="news-day">18</div>
+          <div class="news-mon">Qer 2025</div>
+        </div>
+        <div>
+          <div class="news-title">SBASH nis negociatat për rritjen e pagave të mësuesve për vitin 2026</div>
+          <div class="news-excerpt">Kryetarja Alma Lama prezantoi kërkesat e SBASH në takim me Ministrinë e Arsimit. Rritja e propozuar është 15% mbi bazën aktuale.</div>
+        </div>
+        <span class="news-tag tag-red">Negociata</span>
+      </div>
+
+      <div class="news-item">
+        <div class="news-date-block">
+          <div class="news-day">05</div>
+          <div class="news-mon">Qer 2025</div>
+        </div>
+        <div>
+          <div class="news-title">Trajnim kombëtar: "Të Drejtat e Mësuesit në Epokën Dixhitale"</div>
+          <div class="news-excerpt">500 mësues nga 12 qarqet morën pjesë në seminarin dyditor organizuar nga SBASH në bashkëpunim me ILO.</div>
+        </div>
+        <span class="news-tag tag-gold">Trajnim</span>
+      </div>
+
+      <div class="news-item">
+        <div class="news-date-block">
+          <div class="news-day">22</div>
+          <div class="news-mon">Maj 2025</div>
+        </div>
+        <div>
+          <div class="news-title">Reagim ndaj ndryshimeve në ligjin e arsimit parauniversitar</div>
+          <div class="news-excerpt">SBASH bën publike qëndrimin zyrtar kundër dispozitave që prekin statusin dhe mbrojtjen e punës së mësuesve.</div>
+        </div>
+        <span class="news-tag tag-dark">Deklaratë</span>
+      </div>
+
+      <div class="news-item">
+        <div class="news-date-block">
+          <div class="news-day">10</div>
+          <div class="news-mon">Maj 2025</div>
+        </div>
+        <div>
+          <div class="news-title">1 Maji — SBASH në Ditën Ndërkombëtare të Punëtorëve</div>
+          <div class="news-excerpt">Mbi 3 000 anëtarë marshuan në Tiranë nën sloganin "Dinjitet dhe Paga e Drejtë për Çdo Mësues".</div>
+        </div>
+        <span class="news-tag tag-red">Aktivitet</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="mission" id="misioni">
+  <div class="section-inner">
+    <div class="section-tag">Kush Jemi</div>
+    <h2 class="section-title">Misioni ynë</h2>
+    <p class="section-sub">SBASH është zëri kolektiv i mësuesve shqiptarë — i pavarur, i vendosur, i angazhuar.</p>
+    <div class="mission-grid">
+      <div class="mission-text">
+        <p>Sindikata e Bashkuar e Arsimit Shqiptar (SBASH) është themeluar me bindjen se <strong>mësuesi është shtylla e çdo shoqërie</strong>. Ne luftojmë çdo ditë për kushte pune dinjitoze, paga të drejta dhe një sistem arsimor që respekton njerëzit e tij.</p>
+        <br>
+        <p>Nën udhëheqjen e figurave si <strong>Alma Lama</strong>, SBASH ka qenë pranë çdo mësuesi në çastet e vështira — nga negociatat me qeverinë deri tek mbrojtja individuale ndaj padrejtësive.</p>
+        <br>
+        <p>Ne besojmë se një mësues i respektuar dhe i mbrojtur është <strong>garancia e vetme e arsimit cilësor</strong> për fëmijët e Shqipërisë.</p>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-icon">⚖️</div>
+          <div>
+            <div class="pillar-title">Mbrojtje Ligjore</div>
+            <div class="pillar-desc">Asistencë juridike falas për çdo anëtar në rast konflikti pune ose shkelje të kontratës.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">💼</div>
+          <div>
+            <div class="pillar-title">Negociata Kolektive</div>
+            <div class="pillar-desc">Përfaqësojmë mësuesit në negociatat me qeverinë për pagat, kushtet dhe të drejtat e punës.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">📚</div>
+          <div>
+            <div class="pillar-title">Zhvillim Profesional</div>
+            <div class="pillar-desc">Trajnime, seminare dhe programe certifikimi ekskluzive për anëtarët e SBASH.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🤝</div>
+          <div>
+            <div class="pillar-title">Solidaritet</div>
+            <div class="pillar-desc">Rrjet i gjerë mbështetjeje ndërmjet mësuesve — bashkë jemi më të fortë.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP FORM -->
+<section class="membership" id="anetaresimi">
+  <div class="section-inner">
+    <div class="section-tag">Bashkohu me Ne</div>
+    <h2 class="section-title">Formulari i Anëtarësimit</h2>
+    <p class="section-sub">Plotëso formularin më poshtë. Ekipi ynë do të konfirmojë anëtarësimin tuaj brenda 2–3 ditëve pune.</p>
+
+    <div class="form-card" id="form-card">
+
+      <div class="form-title">Regjistrohu si Anëtar SBASH</div>
+      <div class="form-subtitle">Të gjitha fushat me <span style="color:var(--red)">*</span> janë të detyrueshme. Informacioni ruhet me konfidencialitet të plotë.</div>
+
+      <form id="membership-form" onsubmit="handleSubmit(event)" novalidate>
+
+        <div class="form-section-label">👤 Të Dhëna Personale</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Emri <span class="req">*</span></label>
+            <input type="text" name="emri" placeholder="p.sh. Ardian" required>
+          </div>
+          <div class="form-group">
+            <label>Mbiemri <span class="req">*</span></label>
+            <input type="text" name="mbiemri" placeholder="p.sh. Hoxha" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="email@shembull.com" required>
+          </div>
+          <div class="form-group">
+            <label>Numri i Telefonit <span class="req">*</span></label>
+            <input type="tel" name="telefon" placeholder="+355 6X XXX XXXX" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data e Lindjes</label>
+            <input type="date" name="ditelindja">
+          </div>
+          <div class="form-group">
+            <label>Gjinia</label>
+            <select name="gjinia">
+              <option value="">— Zgjidh —</option>
+              <option>Femër</option>
+              <option>Mashkull</option>
+              <option>Preferoj të mos shprehem</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-label">🏫 Të Dhëna Profesionale</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Qarku <span class="req">*</span></label>
+            <select name="qarku" required>
+              <option value="">— Zgjidh Qarkun —</option>
+              <option>Tiranë</option>
+              <option>Durrës</option>
+              <option>Vlorë</option>
+              <option>Shkodër</option>
+              <option>Elbasan</option>
+              <option>Korçë</option>
+              <option>Fier</option>
+              <option>Gjirokastër</option>
+              <option>Berat</option>
+              <option>Dibër</option>
+              <option>Kukës</option>
+              <option>Lezhë</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Komuna / Bashkia <span class="req">*</span></label>
+            <input type="text" name="bashkia" placeholder="p.sh. Bashkia Durrës" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Emri i Shkollës / Institucionit <span class="req">*</span></label>
+          <input type="text" name="shkolla" placeholder="p.sh. Shkolla 9-vjeçare 'Naim Frashëri'" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Niveli i Arsimit <span class="req">*</span></label>
+            <select name="niveli" required>
+              <option value="">— Zgjidh Nivelin —</option>
+              <option>Arsim Parashkollor</option>
+              <option>Arsim Fillor (1–5)</option>
+              <option>Arsim i Mesëm i Ulët (6–9)</option>
+              <option>Arsim i Mesëm i Lartë</option>
+              <option>Arsim Profesional</option>
+              <option>Arsim i Lartë</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Lënda / Fusha</label>
+            <input type="text" name="lendet" placeholder="p.sh. Matematikë, Fizikë…">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vitet e Eksperiencës</label>
+            <select name="eksperienca">
+              <option value="">— Zgjidh —</option>
+              <option>Nën 1 vit</option>
+              <option>1–5 vjet</option>
+              <option>6–10 vjet</option>
+              <option>11–20 vjet</option>
+              <option>Mbi 20 vjet</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Titulli / Kategoria</label>
+            <select name="titulli">
+              <option value="">— Zgjidh —</option>
+              <option>Mësues i Kualifikuar</option>
+              <option>Mësues i Nivelit III</option>
+              <option>Mësues i Nivelit II</option>
+              <option>Mësues i Nivelit I</option>
+              <option>Mësues Ekselent</option>
+              <option>Drejtues Mësimor</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-label">📋 Interesa & Mbështetje</div>
+        <div style="font-size:0.85rem; color:var(--muted); margin-bottom:0.75rem;">Çfarë shërbimesh SBASH ju interesojnë? (zgjidhni sa dëshironi)</div>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="s1" name="sherbimet" value="mbrojtje-ligjore">
+            <label for="s1">Mbrojtje Ligjore dhe Juridike</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="s2" name="sherbimet" value="negociata">
+            <label for="s2">Informacion mbi Negociatat Kolektive</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="s3" name="sherbimet" value="trajnime">
+            <label for="s3">Trajnime dhe Seminare Profesionale</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="s4" name="sherbimet" value="materiale">
+            <label for="s4">Qasje në Materiale dhe Dokumente</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="s5" name="sherbimet" value="lajme">
+            <label for="s5">Newsletter dhe Njoftime të Rregullta</label>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label>Si mësuat për SBASH?</label>
+          <select name="burimi">
+            <option value="">— Zgjidh —</option>
+            <option>Kolegu / Miku</option>
+            <option>Drejtori i Shkollës</option>
+            <option>Rrjete Sociale (Facebook, Instagram)</option>
+            <option>Media (TV, Gazetë)</option>
+            <option>Interneti / Website</option>
+            <option>Tjetër</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Komente ose Pyetje (opsionale)</label>
+          <textarea name="komente" placeholder="Shkruani çdo pyetje ose koment që dëshironi të ndani me SBASH..."></textarea>
+        </div>
+
+        <div class="form-consent">
+          <strong>Konfidencialiteti i të Dhënave:</strong> Të dhënat tuaja përdoren vetëm për administrimin e anëtarësimit dhe komunikimin zyrtar të SBASH. Nuk ndahen me palë të treta. Mund të tërhiqni anëtarësimin çdo kohë duke kontaktuar zyrën tonë.
+        </div>
+
+        <div class="checkbox-item" style="margin-bottom:0.5rem;">
+          <input type="checkbox" id="consent" required>
+          <label for="consent">Jam dakord me kushtet e anëtarësimit dhe politikën e privatësisë së SBASH <span style="color:var(--red)">*</span></label>
+        </div>
+
+        <div class="form-submit">
+          <div class="submit-note">Konfirmimi dërgohet me email brenda 2–3 ditëve pune.</div>
+          <button type="submit" class="btn-submit">Dërgo Formularin →</button>
+        </div>
+
+      </form>
+
+      <div class="success-msg" id="success-msg">
+        <div class="success-icon">✅</div>
+        <h3>Formulari u Dërgua me Sukses!</h3>
+        <p>Faleminderit që u bashkuat me SBASH. Do të merrni një email konfirmimi brenda 2–3 ditëve pune. Mirë se vini në familjen tonë!</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">SBA<span>SH</span></div>
+        <p class="footer-desc">Sindikata e Bashkuar e Arsimit Shqiptar. Mbrojmë mësuesit, forcojmë arsimin, ndërtojmë të ardhmen e Shqipërisë.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Lidhje</div>
+        <ul class="footer-links">
+          <li><a href="#materiale">Materiale</a></li>
+          <li><a href="#lajme">Lajme</a></li>
+          <li><a href="#misioni">Misioni</a></li>
+          <li><a href="#anetaresimi">Anëtarëso</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Kontakt</div>
+        <ul class="footer-links">
+          <li><a href="#">sbash@sbash.al</a></li>
+          <li><a href="#">+355 4 XXX XXXX</a></li>
+          <li><a href="#">Tiranë, Shqipëri</a></li>
+          <li><a href="#">Facebook / SBASH.al</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SBASH — Sindikata e Bashkuar e Arsimit Shqiptar</span>
+      <span>Ndërtuar me dashurim për çdo mësues shqiptar</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  const form = document.getElementById('membership-form');
+  const consent = document.getElementById('consent');
+  const required = form.querySelectorAll('[required]');
+  let valid = true;
+
+  required.forEach(el => {
+    el.style.borderColor = '';
+    if (!el.value.trim() && el.type !== 'checkbox') {
+      el.style.borderColor = '#B22222';
+      valid = false;
+    }
+    if (el.type === 'checkbox' && !el.checked) {
+      valid = false;
+    }
+  });
+
+  if (!valid) {
+    const first = form.querySelector('[required]:invalid, [style*="border-color: rgb(178"]');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  form.style.display = 'none';
+  document.getElementById('success-msg').classList.add('active');
+  document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.querySelectorAll('.nav-links a, .hero-btns a, .btn-primary, .btn-outline').forEach(el => {
+  if (el.getAttribute('href') && el.getAttribute('href').startsWith('#')) {
+    el.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>
